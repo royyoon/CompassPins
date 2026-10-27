@@ -1,0 +1,16 @@
+Based on the user's input:
+
+Row 3: Names, "Aims (7 Parts)", Conduct, Dinner 4 Mom, Dad and Child Camp trip, Crafts, North Rocker, [empty], Plant & Grow, etc.
+Row 4: Courage, Light Bulb, Crown, Chef's Hat, Sun, Scissors, [empty], [empty], Watering Can, Boot, etc.
+Row 5: VIKINGS, Last Name, First Name, "Adventure Name", [empty columns]
+Row 6: Rocky's data
+
+So:
+- Row 3 (index 2) = PIN NAMES (what we want)
+- Row 4 (index 3) = Symbols/icons  
+- Row 5 (index 4) = Column headers (VIKINGS, Last Name, First Name, Adventure Name)
+- Row 6 (index 5) = Rocky's data
+
+The script currently finds "Last Name" at row 5 (index 4), so:
+- pinHeaderRow = columnHeaderRow - 1 = 4 - 1 = 3 (Row 4 - WRONG! This is symbols)
+- Should be: pinHeaderRow = columnHeaderRow - 2 = 4 - 2 = 2 (Row 3 - CORRECT! This is pin names)

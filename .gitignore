@@ -1,0 +1,40 @@
+# Xcode
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Build artifacts
+*.app
+*.ipa
+build/
+Build/
+
+# Provisioning
+*.mobileprovision
+*.p12
+
+# App icon sources (keep final icons)
+AppIcon.appiconset/
+icon-*.png
+!CompassPins/CompassPins/Assets.xcassets/AppIcon.appiconset/
+
+# Temporary files
+*.tmp
+*.log
+
+# Header images (large files)
+header-*.png
