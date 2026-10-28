@@ -6,6 +6,9 @@ struct AuthenticationView: View {
     @Binding var isSignedIn: Bool
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var showDemoLogin = false
+    @State private var email = ""
+    @State private var password = ""
 
     var body: some View {
         VStack(spacing: 30) {
@@ -34,20 +37,63 @@ struct AuthenticationView: View {
                     .padding()
             }
 
-            Button(action: signIn) {
-                HStack {
-                    Image(systemName: "person.circle.fill")
-                    Text("Sign in with Google")
+            if showDemoLogin {
+                // Demo login form for App Store review
+                VStack(spacing: 16) {
+                    TextField("Email", text: $email)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocapitalization(.none)
+                        .keyboardType(.emailAddress)
+
+                    SecureField("Password", text: $password)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                    Button(action: demoLogin) {
+                        HStack {
+                            Image(systemName: "person.circle.fill")
+                            Text("Demo Login")
+                        }
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.orange)
+                        .cornerRadius(10)
+                    }
+                    .disabled(isLoading)
+
+                    Button("Use Google Sign-In") {
+                        showDemoLogin = false
+                    }
+                    .font(.caption)
+                    .foregroundColor(.blue)
                 }
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.blue)
-                .cornerRadius(10)
+                .padding(.horizontal, 40)
+            } else {
+                Button(action: signIn) {
+                    HStack {
+                        Image(systemName: "person.circle.fill")
+                        Text("Sign in with Google")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(10)
+                }
+                .disabled(isLoading)
+                .padding(.horizontal, 40)
+
+                Button("App Store Reviewer? Demo Login") {
+                    showDemoLogin = true
+                    email = "example@royyoon.com"
+                    password = "Password123"
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .padding(.top, 8)
             }
-            .disabled(isLoading)
-            .padding(.horizontal, 40)
 
             if isLoading {
                 ProgressView()
@@ -62,6 +108,26 @@ struct AuthenticationView: View {
                 .padding(.bottom, 20)
         }
         .padding()
+    }
+
+    private func demoLogin() {
+        // Check demo credentials
+        if email == "example@royyoon.com" && password == "Password123" {
+            isLoading = true
+            errorMessage = nil
+
+            // Set demo mode and load mock data
+            apiService.setDemoMode(true)
+
+            Task {
+                await MainActor.run {
+                    isLoading = false
+                    isSignedIn = true
+                }
+            }
+        } else {
+            errorMessage = "Invalid demo credentials. Use:\nEmail: example@royyoon.com\nPassword: Password123"
+        }
     }
 
     private func signIn() {

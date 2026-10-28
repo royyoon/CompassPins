@@ -15,10 +15,30 @@ class APIService: ObservableObject {
     @Published var errorMessage: String?
 
     private var idToken: String?
+    private var isDemoMode = false
 
     private init() {}
 
     // MARK: - Authentication
+
+    func setDemoMode(_ enabled: Bool) {
+        isDemoMode = enabled
+        if enabled {
+            // Create mock user for demo
+            let mockChild = Explorer(
+                circle: "Vikings",
+                lastName: "Demo",
+                firstName: "Maverick",
+                adventureName: "Thunderbolt"
+            )
+            currentUser = User(
+                email: "example@royyoon.com",
+                name: "Demo User",
+                role: .parent,
+                children: [mockChild]
+            )
+        }
+    }
 
     func setIDToken(_ token: String) {
         self.idToken = token
@@ -32,6 +52,7 @@ class APIService: ObservableObject {
     func clearAuth() {
         idToken = nil
         currentUser = nil
+        isDemoMode = false
         UserDefaults.standard.removeObject(forKey: "googleIDToken")
         UserDefaults.standard.removeObject(forKey: "cachedUser")
     }
@@ -108,6 +129,11 @@ class APIService: ObservableObject {
     }
 
     func getProgress(circle: String? = nil, forceRefresh: Bool = false) async throws -> [ExplorerProgress] {
+        // Return demo data if in demo mode
+        if isDemoMode {
+            return try await getDemoProgress()
+        }
+
         guard let token = idToken else {
             throw APIServiceError.noToken
         }
@@ -147,6 +173,57 @@ class APIService: ObservableObject {
         cacheProgress(progress)
 
         return progress
+    }
+
+    private func getDemoProgress() async throws -> [ExplorerProgress] {
+        // Simulate network delay
+        try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+
+        guard let mockChild = currentUser?.children?.first else {
+            throw APIServiceError.noToken
+        }
+
+        // Create random pin progress for demo
+        let allPins = PinCatalog.all
+        var pins: [String: PinStatus] = [:]
+
+        // Randomly assign statuses to pins
+        for pin in allPins {
+            let random = Int.random(in: 0...10)
+            if random < 2 {
+                pins[pin.name] = .earned
+            } else if random < 4 {
+                pins[pin.name] = .submitted
+            } else if random < 7 {
+                pins[pin.name] = .open
+            } else {
+                pins[pin.name] = .notStarted
+            }
+        }
+
+        // Ensure some specific pins are earned for demo
+        pins["Names"] = .earned
+        pins["Aims"] = .earned
+        pins["Conduct"] = .earned
+        pins["Hike"] = .open
+        pins["Knife Safety"] = .open
+        pins["Fire Safety"] = .submitted
+
+        // Calculate rockers (need 3 pins per journey)
+        var rockers: [Journey: Bool] = [:]
+        for journey in Journey.allCases {
+            let journeyPins = allPins.filter { $0.journey == journey }
+            let earnedCount = journeyPins.filter { pins[$0.name] == .earned || pins[$0.name] == .issued }.count
+            rockers[journey] = earnedCount >= 3
+        }
+
+        return [ExplorerProgress(
+            explorer: mockChild,
+            pins: pins,
+            rockers: rockers,
+            hasMedallion: false,
+            submissions: []
+        )]
     }
 
     // Merge progress additively - never lose progress

@@ -56,22 +56,24 @@ https://github.com/royyoon/CompassPins/blob/main/PRIVACY.md (you'll need to crea
 ## Age Rating
 **4+** (Designed for kids and families)
 
-## What to Test (For TestFlight Review Notes)
+## What to Test (For App Store Review Notes)
 
 Thank you for reviewing CompassPins. This app is designed for Adventure Guides families.
 
-**Test Account:**
-Email: roy.yoon@gmail.com
-Password: (Not needed - uses Google Sign-In)
+**Demo Account (For Reviewers):**
+Email: example@royyoon.com
+Password: Password123
 
 **How to Test:**
-1. Sign in with Google (test account provided above)
-2. View compass journey progress for "Stinger" (Rocky)
-3. Tap on any journey card (North/East/South/West) to see pin details
-4. Tap on individual pins to view requirements and visual guides
-5. Test pull-to-refresh on home screen
+1. Launch the app
+2. Tap "App Store Reviewer? Demo Login" button
+3. Sign in with demo credentials above (pre-filled)
+4. View compass journey progress for "Maverick" (adventure name: Thunderbolt)
+5. Tap on any journey card (North/East/South/West) to see pin details
+6. Tap on individual pins to view requirements and visual guides
+7. Test pull-to-refresh on home screen
 
-**Note:** This app requires backend access to a Google Spreadsheet database managed by the Adventure Guides Circle. The test account has sample data pre-loaded.
+**Note:** The demo account uses mock data for review purposes. Production users sign in with Google accounts registered with their Adventure Guides Circle.
 
 ## App Review Information
 
@@ -81,11 +83,16 @@ Password: (Not needed - uses Google Sign-In)
 Users must sign in with a Google account that's registered with their Adventure Guides Circle.
 
 **Demo Account Credentials:**
-- **Email**: roy.yoon@gmail.com
-- **Password**: (Google Sign-In - reviewer can use Apple's test accounts)
+- **Email**: example@royyoon.com
+- **Password**: Password123
 
 **Notes for Reviewer:**
-This is a specialized app for Adventure Guides program participants. Access is restricted to families registered in the program through their Circle's Pin Wizard. The app connects to a Google Sheets backend to track pin progress. Sample data is provided in the test account.
+This is a specialized app for Adventure Guides program participants. To access the demo account:
+1. Launch the app
+2. Tap "App Store Reviewer? Demo Login" at the bottom
+3. Credentials are pre-filled - just tap "Demo Login"
+
+The demo mode loads mock data showing progress for an explorer named "Maverick" with random pins earned across all four journey directions. Production users authenticate with Google accounts registered with their Adventure Guides Circle.
 
 ## Screenshots Needed
 
