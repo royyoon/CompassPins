@@ -17,6 +17,15 @@ struct CompassPinsApp: App {
             }
             .environmentObject(apiService)
             .task {
+                // Check for demo mode first
+                apiService.restoreDemoMode()
+
+                if apiService.currentUser != nil {
+                    print("✅ Restored demo user")
+                    isSignedIn = true
+                    return
+                }
+
                 // Check for stored token and restore session
                 if let token = apiService.getStoredToken() {
                     print("🔐 Found stored token, restoring session...")

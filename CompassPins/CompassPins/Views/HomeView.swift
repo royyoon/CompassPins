@@ -236,7 +236,10 @@ struct HomeView: View {
     // MARK: - Actions
 
     private func loadData(forceRefresh: Bool = false) async {
-        isLoading = true
+        // Don't show loading if we already have data (from cache)
+        if explorersProgress.isEmpty {
+            isLoading = true
+        }
         errorMessage = nil
 
         // Load catalog from local data

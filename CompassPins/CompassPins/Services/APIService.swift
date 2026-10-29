@@ -23,6 +23,8 @@ class APIService: ObservableObject {
 
     func setDemoMode(_ enabled: Bool) {
         isDemoMode = enabled
+        UserDefaults.standard.set(enabled, forKey: "isDemoMode")
+
         if enabled {
             // Create mock user for demo
             let mockChild = Explorer(
@@ -31,12 +33,27 @@ class APIService: ObservableObject {
                 firstName: "Maverick",
                 adventureName: "Thunderbolt"
             )
-            currentUser = User(
+            let user = User(
                 email: "example@royyoon.com",
                 name: "Demo User",
                 role: .parent,
                 children: [mockChild]
             )
+            currentUser = user
+
+            // Cache the demo user
+            cacheUser(user)
+        }
+    }
+
+    func restoreDemoMode() {
+        if UserDefaults.standard.bool(forKey: "isDemoMode") {
+            isDemoMode = true
+
+            // Restore cached user
+            if let user = loadCachedUser() {
+                currentUser = user
+            }
         }
     }
 
@@ -55,6 +72,8 @@ class APIService: ObservableObject {
         isDemoMode = false
         UserDefaults.standard.removeObject(forKey: "googleIDToken")
         UserDefaults.standard.removeObject(forKey: "cachedUser")
+        UserDefaults.standard.removeObject(forKey: "isDemoMode")
+        UserDefaults.standard.removeObject(forKey: "cachedProgress")
     }
 
     // MARK: - API Calls
